@@ -1,0 +1,14 @@
+---
+title: "p8105_hw3_ac4964"
+author: "AnMei Chen"
+date: "10/13/2021"
+output: github_document
+---
+
+```{r }
+library(tidyverse)
+library(p8105.datasets)
+data("instacart")
+```
+
+
