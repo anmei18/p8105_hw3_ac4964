@@ -112,22 +112,23 @@ Make a table showing the mean hour of the day at which Pink Lady Apples and Coff
 
 ```{r}
 
-n_each_day =
-  instacart %>% 
-  filter(product_name == "Pink Lady Apples" | product_name == "Coffee Ice Cream") %>%
-  group_by(order_dow) %>%
-  summarize(counts = n())
-
 apples_icecream =
   instacart %>% 
   filter(product_name == "Pink Lady Apples" | product_name == "Coffee Ice Cream") %>%
-  mutate(product_name = factor(product_name)) %>% 
-  select(c(-order_id,-product_id,-order_number, -add_to_cart_order,-reordered,-eval_set, -aisle, -department,-department_id,-days_since_prior_order, -aisle_id)) %>% 
+  group_by(product_name,order_dow) %>% 
+  summarize(mean_hour = mean(order_hour_of_day)) %>% 
   pivot_wider(
     names_from = "order_dow",
-    values_from = "order_hour_of_day"
+    values_from = "mean_hour"
   ) %>% 
   knitr::kable()
+```
+
+
+# Problem 2
+
+```{r}
+
 ```
 
 
