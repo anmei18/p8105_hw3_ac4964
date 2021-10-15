@@ -127,9 +127,34 @@ apples_icecream =
 
 # Problem 2
 
-```{r}
 
+```{r}
+data("brfss_smart2010")
+
+brfss_df = 
+  brfss_smart2010 %>% 
+  janitor::clean_names() %>% 
+  filter(topic == "Overall Health") %>% 
+  mutate(
+    response = factor(response),
+    response = ordered(response, levels = c("Poor", "Fair", "Good", "Very good", "Excellent"))
+  ) 
+
+levels(brfss_df$response)
+  
 ```
 
+
+In 2002, which states were observed at 7 or more locations? What about in 2010?
+
+```{r}
+colnames(brfss_df)
+
+states_more_locations = 
+  brfss_df %>% 
+  group_by(locationabbr,locationdesc) %>% 
+  summarize(counts = n())
+  
+```
 
 
