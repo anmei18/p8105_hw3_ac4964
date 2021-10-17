@@ -141,8 +141,12 @@ brfss_df =
   filter(topic == "Overall Health") %>% 
   mutate(
     response = factor(response),
-    response = ordered(response, levels = c("Poor", "Fair", "Good", "Very good", "Excellent"))
-  ) 
+    response = ordered(response, levels = c("Poor", "Fair", "Good", "Very good", "Excellent")),
+  ) %>% 
+  rename( 
+    state = locationabbr,
+    county = locationdesc 
+          )
 
 levels(brfss_df$response)
   
@@ -157,10 +161,21 @@ colnames(brfss_df)
 location_2002 = 
   brfss_df %>%
   filter(year == "2002") %>% 
-  group_by(locationdesc) %>% 
-  count(locationabbr)
+  group_by(state) %>%  
+  distinct(county) %>%  
+  count(state) %>% 
+  filter(n >= 7) %>% 
+  arrange(n)
 
-  
+location_2010 = 
+  brfss_df %>%
+  filter(year == "2010") %>% 
+  group_by(state) %>%  
+  distinct(county) %>%  
+  count(state) %>% 
+  filter(n >= 7) %>% 
+  arrange(n)
+
 
 ```
 
@@ -185,7 +200,7 @@ Make a two-panel plot showing, for the years 2006, and 2010, distribution of dat
 
 distribution_plot =
   brfss_df %>% 
-  filter(year == "2006" | year == "2010" , locationabbr == "NY") %>% 
+  filter(year == "2006" | year == "2010" , state == "NY") %>% 
   ggplot(aes(x = response, y = data_value)) +
   geom_boxplot() +
   facet_grid(. ~ year)
