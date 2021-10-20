@@ -246,6 +246,8 @@ The dataset of Accekerineters contains  `r max(accel_df$day_id)` days of acceler
 
 Traditional analyses of accelerometer data focus on the total activity over the day. Using your tidied dataset, aggregate across minutes to create a total activity variable for each day, and create a table showing these totals. Are any trends apparent?
 
+The total activity for each day goes up and down, which means it does not have a specific trend.
+
 ```{r}
 total_act =
   accel_df %>%
@@ -270,23 +272,25 @@ hr_act_time_plot =
   accel_df %>%
     mutate(
     day = factor(day),
-    day = ordered(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
+    day = ordered(day, levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")),
   ) %>% 
   pivot_longer(
     activity_1:activity_1440,
-    names_to = "minute",
     names_prefix = "activity_",
+    names_to = "minute",
     values_to = "activity_count"
   ) %>% 
+  mutate(minute = as.integer(minute)) %>% 
   ggplot(aes(x = minute, y = activity_count, color = day)) +
   geom_line() +
+  
   labs(
     title = "24-Hour Activity Time Courses For Each Day",
-    x = "Day",
+    x = "Activity Time In Minute",
     y = "Activity Counts For Each Minute",
   ) 
 ```
 
 Describe in words any patterns or conclusions you can make based on this graph.
 
-Most of the days the 24-hour acticity counts for each minute of this patient are ranging from 0 to 2500. Wednesday has the highest activity counts for each minute in a 24-hour day.
+Most of the days the activity time in minute of this patient are ranging from 500 to 1500. Wednesday has the highest activity counts for each minute in a 24-hour day, and sundays have the second highest activity counts for each minute in a 24_hour day.
